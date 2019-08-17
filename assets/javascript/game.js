@@ -37,6 +37,9 @@ sound_failure.volume = 0.2;
 
 var gameObject = {
     gameStart: function () {
+        //remove key event from document
+        document.removeEventListener('keydown', gameObject.gameStart);
+        
         //reset UI
         p_hp.innerHTML = `${totalMistake - mistakeCount}/${totalMistake}`;
         p_guessesCorrect.textContent = '';
@@ -48,8 +51,11 @@ var gameObject = {
         div_progress_inner.style.width = "100%";
         div_progress_inner.style.backgroundColor = "rgb(17, 210, 26)";
 
+        sound_success.currentTime = 0;
         sound_success.pause();
+        sound_failure.currentTime = 0;
         sound_failure.pause();
+
 
         //game variables
         let answer = wordBank[parseInt(Math.random() * wordBank.length)];
@@ -102,11 +108,11 @@ var gameObject = {
                         }
                     }
                     if (recordMistake) {
-                        sound_incorrect.pause();
+                        // sound_incorrect.pause();
                         sound_incorrect.currentTime = 0;
                         sound_incorrect.play();
                     } else {
-                        sound_correct.pause();
+                        // sound_correct.pause();
                         sound_correct.currentTime = 0;
                         sound_correct.play();
                     }
@@ -132,21 +138,13 @@ var gameObject = {
                 p_result.style.color = 'green';
                 wins++;
 
-                setTimeout(function () {
-                    sound_success.pause();
-                    sound_success.currentTime = 0;
-                    sound_success.play();
-                }, 500);
+                setTimeout(gameObject.playEndTone(sound_success), 500);
             } else if (mistakeCount === totalMistake) {
                 p_result.textContent += 'YOU LOSE!!!';
                 p_result.style.color = 'red';
                 losses++;
 
-                setTimeout(function () {
-                    sound_failure.pause();
-                    sound_failure.currentTime = 0;
-                    sound_failure.play();
-                }, 500);
+                setTimeout(gameObject.playEndTone(sound_failure), 500);
             }
             ////reset counters, enable buttons, disable keyboard
             if (correctCount === answer.length || mistakeCount === totalMistake) {
@@ -154,8 +152,11 @@ var gameObject = {
                 mistakeCount = 0;
                 button_start.disabled = false;
                 document.removeEventListener('keydown', keyResponse);
-                button_start.innerHTML = 'REPLAY';
+                button_start.innerHTML = 'CLICK or PRESS ANY KEY';
                 div_score.textContent = `Wins: ${wins} | Losses: ${losses}`;
+
+                //adding event listener for any key
+                document.addEventListener('keydown', gameObject.gameStart);
             }
         }
     },
@@ -169,8 +170,17 @@ var gameObject = {
             }
         }
         return tempArray;
+    },
+    playEndTone: function(sound) {
+        sound.currentTime = 0;
+        sound.play().then(response => {
+        }).catch(e => {
+            console.log(e, 'something went wrong :( i dont know why');
+        });
     }
 }
 
 button_start.addEventListener('click', gameObject.gameStart);
 div_score.textContent = `Wins: ${wins} | Losses: ${losses}`;
+document.addEventListener('keydown', gameObject.gameStart);
+button_start.textContent = 'CLICK or PRESS ANY KEY';
