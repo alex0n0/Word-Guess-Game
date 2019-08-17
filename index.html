@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="./assets/css/style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1><span>G</span>UESS <span>T</span>HE <span>T</span>REE</h1>
+        </div>
+    </header>
+    <main>
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <button id="button_start">PLAY</button>
+                </div>
+                <div class="col" id="div_score">wins: 0 | losses: 0</div>
+            </div>
+
+            <div class="row">
+                <div class="col left">
+                    <div class="div_hp_bar">
+                        <div id="div_progress_outer">
+                            <div id="div_progress_inner"></div>
+                        </div>
+                        <p id="p_hp">8/8</p>
+                    </div>
+                </div>
+                <div class="col right">
+                    <p id="p_result" style="font-weight: bold;"></p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="card">
+                        <p id="p_guessesCorrect"></p>
+                    </div>            
+                </div>
+                <div class="col">
+                    <div class="card">
+                        <p id="p_guessesAll"></p>
+                    </div>                                
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <div class="container">
+            <p id="p_answer"></p>
+        </div>
+    </footer>
+
+    <script type="text/javascript" src="./assets/javascript/game.js"></script>
+</body>
+</html>
