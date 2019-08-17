@@ -253,11 +253,12 @@ main .div_hp_bar {
   }
 }
 
-main .div_hp_bar p {
+main .div_hp_bar #p_hp {
   -webkit-user-select: none;
      -moz-user-select: none;
       -ms-user-select: none;
           user-select: none;
+  width: 4em;
 }
 
 main #div_progress_outer {

@@ -23,6 +23,17 @@ let correctCount = 0;
 p_hp.innerHTML = `${totalMistake - mistakeCount}/${totalMistake}`;
 
 
+var sound_correct = new Audio('./assets/sounds/sound_correct.mp3');
+var sound_incorrect = new Audio('./assets/sounds/sound_incorrect.mp3');
+var sound_success = new Audio('./assets/sounds/sound_success.mp3');
+var sound_failure = new Audio('./assets/sounds/sound_failure.mp3');
+sound_correct.volume = 0.7;
+sound_incorrect.volume = 0.7;
+sound_success.volume = 0.2;
+sound_failure.volume = 0.2;
+
+
+
 
 var gameObject = {
     gameStart: function () {
@@ -36,6 +47,9 @@ var gameObject = {
 
         div_progress_inner.style.width = "100%";
         div_progress_inner.style.backgroundColor = "rgb(17, 210, 26)";
+
+        sound_success.pause();
+        sound_failure.pause();
 
         //game variables
         let answer = wordBank[parseInt(Math.random() * wordBank.length)];
@@ -79,7 +93,6 @@ var gameObject = {
                         if (letter === answer[i]) {
                             guessesCorrect[i] = letter;
                             correctCount++;
-                            console.log(guessesCorrect + ' ' + correctCount);
                             recordMistake = false;
 
                             p_guessesCorrect.innerHTML = '';
@@ -88,12 +101,20 @@ var gameObject = {
                             }
                         }
                     }
+                    if (recordMistake) {
+                        sound_incorrect.pause();
+                        sound_incorrect.currentTime = 0;
+                        sound_incorrect.play();
+                    } else {
+                        sound_correct.pause();
+                        sound_correct.currentTime = 0;
+                        sound_correct.play();
+                    }
 
                     //render HP bar
                     if (recordMistake) {
                         mistakeCount++;
                         div_progress_inner.style.width = `${((totalMistake - mistakeCount) / totalMistake) * 100}%`;
-                        console.log(`${((totalMistake - mistakeCount) / totalMistake) * 100}%`);
                         if ((totalMistake - mistakeCount) / totalMistake < 0.2) {
                             div_progress_inner.style.backgroundColor = "rgb(248, 87, 55)";
                         } else if (((totalMistake - mistakeCount) / totalMistake < 0.5)) {
@@ -110,10 +131,22 @@ var gameObject = {
                 p_result.textContent += 'YOU WIN!!!';
                 p_result.style.color = 'green';
                 wins++;
+
+                setTimeout(function () {
+                    sound_success.pause();
+                    sound_success.currentTime = 0;
+                    sound_success.play();
+                }, 500);
             } else if (mistakeCount === totalMistake) {
                 p_result.textContent += 'YOU LOSE!!!';
                 p_result.style.color = 'red';
                 losses++;
+
+                setTimeout(function () {
+                    sound_failure.pause();
+                    sound_failure.currentTime = 0;
+                    sound_failure.play();
+                }, 500);
             }
             ////reset counters, enable buttons, disable keyboard
             if (correctCount === answer.length || mistakeCount === totalMistake) {
@@ -122,7 +155,7 @@ var gameObject = {
                 button_start.disabled = false;
                 document.removeEventListener('keydown', keyResponse);
                 button_start.innerHTML = 'REPLAY';
-                div_score.textContent = `wins: ${wins} | losses: ${losses}`;
+                div_score.textContent = `Wins: ${wins} | Losses: ${losses}`;
             }
         }
     },
@@ -139,6 +172,5 @@ var gameObject = {
     }
 }
 
-
-
 button_start.addEventListener('click', gameObject.gameStart);
+div_score.textContent = `Wins: ${wins} | Losses: ${losses}`;

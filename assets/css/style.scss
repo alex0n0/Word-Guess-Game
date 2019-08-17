@@ -168,8 +168,9 @@ main {
         @include break-tablet {
             padding: 2px 8px 2px 4px;
         }
-        p {
+        #p_hp {
             user-select: none;
+            width: 4em;
         }
     }
     #div_progress_outer {
